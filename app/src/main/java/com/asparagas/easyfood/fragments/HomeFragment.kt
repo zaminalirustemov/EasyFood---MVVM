@@ -8,8 +8,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.asparagas.easyfood.activities.MealActivity
+import com.asparagas.easyfood.adapters.MostPopularAdapter
 import com.asparagas.easyfood.databinding.FragmentHomeBinding
+import com.asparagas.easyfood.pojo.CategoryMeals
 import com.asparagas.easyfood.pojo.Meal
 import com.asparagas.easyfood.viewModel.HomeViewModel
 import com.bumptech.glide.Glide
@@ -18,17 +21,19 @@ class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var homeViewModel: HomeViewModel
-    private lateinit var randomMeal:Meal
+    private lateinit var randomMeal: Meal
+    private lateinit var popularItemsAdapter: MostPopularAdapter
 
-    companion object{
-        const val MEAL_ID="com.asparagas.easyfood.fragments.idMeal"
-        const val MEAL_NAME="com.asparagas.easyfood.fragments.nameMeal"
-        const val MEAL_THUMB="com.asparagas.easyfood.fragments.thumbMeal"
+    companion object {
+        const val MEAL_ID = "com.asparagas.easyfood.fragments.idMeal"
+        const val MEAL_NAME = "com.asparagas.easyfood.fragments.nameMeal"
+        const val MEAL_THUMB = "com.asparagas.easyfood.fragments.thumbMeal"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+        popularItemsAdapter = MostPopularAdapter()
     }
 
     override fun onCreateView(
@@ -42,20 +47,21 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        observerRandomMeal()
+        preparePopularItemsRecyclerViews()
 
         homeViewModel.getRandomMeal()
-
+        observerRandomMeal()
         onRandomMealClick()
+
+        homeViewModel.getPopularItems()
+        observerPopularItems()
+        onPopularItemClick()
     }
 
-    private fun onRandomMealClick() {
-        binding.randomMealCard.setOnClickListener {
-            val intent = Intent(activity,MealActivity::class.java)
-            intent.putExtra(MEAL_ID,randomMeal.idMeal)
-            intent.putExtra(MEAL_NAME,randomMeal.strMeal)
-            intent.putExtra(MEAL_THUMB,randomMeal.strMealThumb)
-            startActivity(intent)
+    private fun preparePopularItemsRecyclerViews() {
+        binding.recViewMealsPopular.apply {
+            layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+            adapter = popularItemsAdapter
         }
     }
 
@@ -66,8 +72,36 @@ class HomeFragment : Fragment() {
                     .load(it.strMealThumb)
                     .into(binding.imgRandomMeal)
 
-                this.randomMeal=it
+                this.randomMeal = it
             }
         })
+    }
+
+    private fun onRandomMealClick() {
+        binding.randomMealCard.setOnClickListener {
+            val intent = Intent(activity, MealActivity::class.java)
+            intent.putExtra(MEAL_ID, randomMeal.idMeal)
+            intent.putExtra(MEAL_NAME, randomMeal.strMeal)
+            intent.putExtra(MEAL_THUMB, randomMeal.strMealThumb)
+            startActivity(intent)
+        }
+    }
+
+    private fun onPopularItemClick() {
+        popularItemsAdapter.onItemClick = { meal ->
+            val intent = Intent(activity, MealActivity::class.java)
+            intent.putExtra(MEAL_ID, meal.idMeal)
+            intent.putExtra(MEAL_NAME, meal.strMeal)
+            intent.putExtra(MEAL_THUMB, meal.strMealThumb)
+            startActivity(intent)
+        }
+    }
+
+    private fun observerPopularItems() {
+        homeViewModel.observePopularItemsLiveData().observe(viewLifecycleOwner) { mealList ->
+            mealList?.let {
+                popularItemsAdapter.setMeals(it as ArrayList<CategoryMeals>)
+            }
+        }
     }
 }
