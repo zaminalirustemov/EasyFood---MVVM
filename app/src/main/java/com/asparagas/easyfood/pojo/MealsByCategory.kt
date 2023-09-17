@@ -1,6 +1,6 @@
 package com.asparagas.easyfood.pojo
 
-data class CategoryMeals(
+data class MealsByCategory(
     val idMeal: String,
     val strMeal: String,
     val strMealThumb: String
