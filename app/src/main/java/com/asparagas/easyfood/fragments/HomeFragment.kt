@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.asparagas.easyfood.activities.CategoryMealsActivity
 import com.asparagas.easyfood.activities.MealActivity
 import com.asparagas.easyfood.adapters.CategoriesAdapter
 import com.asparagas.easyfood.adapters.MostPopularAdapter
@@ -33,6 +34,7 @@ class HomeFragment : Fragment() {
         const val MEAL_ID = "com.asparagas.easyfood.fragments.idMeal"
         const val MEAL_NAME = "com.asparagas.easyfood.fragments.nameMeal"
         const val MEAL_THUMB = "com.asparagas.easyfood.fragments.thumbMeal"
+        const val CATEGORY_NAME = "com.asparagas.easyfood.fragments.nameCategory"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,6 +69,15 @@ class HomeFragment : Fragment() {
 
         homeViewModel.getCategories()
         observerCategories()
+        onCategoryClick()
+    }
+
+    private fun onCategoryClick() {
+        categoriesAdapter.onItemClick = { category ->
+            val intent = Intent(activity, CategoryMealsActivity::class.java)
+            intent.putExtra(CATEGORY_NAME,category.strCategory)
+            startActivity(intent)
+        }
     }
 
     private fun preparePopularItemsRecyclerViews() {
@@ -75,9 +86,10 @@ class HomeFragment : Fragment() {
             adapter = popularItemsAdapter
         }
     }
+
     private fun prepareCategoriesRecyclerViews() {
         binding.recViewCategories.apply {
-            layoutManager = GridLayoutManager(context,3,GridLayoutManager.VERTICAL,false)
+            layoutManager = GridLayoutManager(context, 3, GridLayoutManager.VERTICAL, false)
             adapter = categoriesAdapter
         }
     }
@@ -124,7 +136,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun observerCategories() {
-        homeViewModel.observeCategoriesLiveData().observe(viewLifecycleOwner){categories->
+        homeViewModel.observeCategoriesLiveData().observe(viewLifecycleOwner) { categories ->
             categories?.let {
                 categoriesAdapter.setCategories(it as ArrayList<Category>)
             }

@@ -8,18 +8,20 @@ import com.asparagas.easyfood.databinding.CategoriesItemsBinding
 import com.asparagas.easyfood.pojo.Category
 import com.bumptech.glide.Glide
 
-class CategoriesAdapter(): RecyclerView.Adapter<CategoriesAdapter.CategoryViewHolder>() {
-    private var categoryList=ArrayList<Category>()
-    inner class CategoryViewHolder(var binding:CategoriesItemsBinding):ViewHolder(binding.root)
+class CategoriesAdapter() : RecyclerView.Adapter<CategoriesAdapter.CategoryViewHolder>() {
+    private var categoryList = ArrayList<Category>()
+    var onItemClick: ((Category) -> Unit)? = null
 
-    fun setCategories(categoryList: ArrayList<Category>){
-        this.categoryList=categoryList
+    inner class CategoryViewHolder(var binding: CategoriesItemsBinding) : ViewHolder(binding.root)
+
+    fun setCategories(categoryList: ArrayList<Category>) {
+        this.categoryList = categoryList
         notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = CategoriesItemsBinding.inflate(inflater,parent,false)
+        val binding = CategoriesItemsBinding.inflate(inflater, parent, false)
         return CategoryViewHolder(binding)
     }
 
@@ -31,5 +33,9 @@ class CategoriesAdapter(): RecyclerView.Adapter<CategoriesAdapter.CategoryViewHo
             .into(holder.binding.imgCategory)
 
         holder.binding.tvCategoryName.text = categoryList[position].strCategory
+
+        holder.itemView.setOnClickListener {
+            onItemClick?.invoke(categoryList[position])
+        }
     }
 }
