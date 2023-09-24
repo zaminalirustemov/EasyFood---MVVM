@@ -11,10 +11,10 @@ import com.asparagas.easyfood.pojo.Meal
 @Dao
 interface MealDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun update(meal: Meal)
+    suspend fun update(meal: Meal)
 
     @Delete
-    fun delete(meal: Meal)
+    suspend fun delete(meal: Meal)
 
     @Query("SELECT * FROM mealInformation")
     fun getAllMeals(): LiveData<List<Meal>>
