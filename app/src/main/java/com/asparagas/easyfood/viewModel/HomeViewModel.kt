@@ -1,9 +1,12 @@
 package com.asparagas.easyfood.viewModel
 
 import android.util.Log
+import androidx.core.widget.ListViewAutoScrollHelper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.asparagas.easyfood.db.MealDatabase
 import com.asparagas.easyfood.pojo.Category
 import com.asparagas.easyfood.pojo.CategoryList
 import com.asparagas.easyfood.pojo.MealsByCategoryList
@@ -11,15 +14,19 @@ import com.asparagas.easyfood.pojo.MealsByCategory
 import com.asparagas.easyfood.pojo.Meal
 import com.asparagas.easyfood.pojo.MealList
 import com.asparagas.easyfood.retrofit.RetrofitInstance
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(
+    private val mealDatabase: MealDatabase
+) : ViewModel() {
 
     private var randomMealLiveData = MutableLiveData<Meal>()
     private var popularItemsLiveData = MutableLiveData<List<MealsByCategory>?>()
     private var categoriesLiveData = MutableLiveData<List<Category>>()
+    private var favoritesMealsLiveData = mealDatabase.mealDao().getAllMeals()
 
     fun getRandomMeal() {
         RetrofitInstance.api.getRandomMeal().enqueue(object : Callback<MealList> {
@@ -75,9 +82,22 @@ class HomeViewModel : ViewModel() {
         })
     }
 
+    fun insertMeal(meal: Meal) {
+        viewModelScope.launch {
+            mealDatabase.mealDao().update(meal)
+        }
+    }
+
+    fun deleteMeal(meal: Meal) {
+        viewModelScope.launch {
+            mealDatabase.mealDao().delete(meal)
+        }
+    }
+
     fun observeRandomMealLiveData(): LiveData<Meal> = randomMealLiveData
     fun observePopularItemsLiveData(): LiveData<List<MealsByCategory>?> = popularItemsLiveData
     fun observeCategoriesLiveData(): LiveData<List<Category>> = categoriesLiveData
+    fun observeFavoritesMealsLiveData(): LiveData<List<Meal>> = favoritesMealsLiveData
 
     private fun handleFailure(callName: String, throwable: Throwable) {
         Log.d("HomeViewModel", "Error in $callName: ${throwable.message}")

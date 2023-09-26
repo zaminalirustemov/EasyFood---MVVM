@@ -3,15 +3,24 @@ package com.asparagas.easyfood.activities
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.asparagas.easyfood.R
 import com.asparagas.easyfood.databinding.ActivityMainBinding
+import com.asparagas.easyfood.db.MealDatabase
 import com.asparagas.easyfood.fragments.CategoriesFragment
 import com.asparagas.easyfood.fragments.FavoritesFragment
 import com.asparagas.easyfood.fragments.HomeFragment
+import com.asparagas.easyfood.viewModel.HomeViewModel
+import com.asparagas.easyfood.viewModel.HomeViewModelFactory
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    val viewModel: HomeViewModel by lazy {
+        val mealDatabase = MealDatabase.getInstance(this)
+        val homeViewModelProviderFactory = HomeViewModelFactory(mealDatabase)
+        ViewModelProvider(this,homeViewModelProviderFactory)[HomeViewModel::class.java]
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
