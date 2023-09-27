@@ -16,11 +16,13 @@ import com.asparagas.easyfood.activities.MealActivity
 import com.asparagas.easyfood.adapters.CategoriesAdapter
 import com.asparagas.easyfood.adapters.MostPopularAdapter
 import com.asparagas.easyfood.databinding.FragmentHomeBinding
+import com.asparagas.easyfood.fragments.bottomsheet.MealBottomSheetFragment
 import com.asparagas.easyfood.pojo.Category
 import com.asparagas.easyfood.pojo.MealsByCategory
 import com.asparagas.easyfood.pojo.Meal
 import com.asparagas.easyfood.viewModel.HomeViewModel
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class HomeFragment : Fragment() {
 
@@ -66,10 +68,18 @@ class HomeFragment : Fragment() {
         viewModel.getPopularItems()
         observerPopularItems()
         onPopularItemClick()
+        onPopularItemLongClick()
 
         viewModel.getCategories()
         observerCategories()
         onCategoryClick()
+    }
+
+    private fun onPopularItemLongClick() {
+        popularItemsAdapter.onLongClickListener = {meal->
+            val mealBottomSheetFragment= MealBottomSheetFragment.newInstance(meal.idMeal)
+            mealBottomSheetFragment.show(childFragmentManager,"Meal info")
+        }
     }
 
     private fun onCategoryClick() {

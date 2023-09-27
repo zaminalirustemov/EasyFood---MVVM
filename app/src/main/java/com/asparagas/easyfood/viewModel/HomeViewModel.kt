@@ -27,6 +27,7 @@ class HomeViewModel(
     private var popularItemsLiveData = MutableLiveData<List<MealsByCategory>?>()
     private var categoriesLiveData = MutableLiveData<List<Category>>()
     private var favoritesMealsLiveData = mealDatabase.mealDao().getAllMeals()
+    private var bottomSheetLiveData = MutableLiveData<Meal>()
 
     fun getRandomMeal() {
         RetrofitInstance.api.getRandomMeal().enqueue(object : Callback<MealList> {
@@ -66,11 +67,11 @@ class HomeViewModel(
             })
     }
 
-    fun getCategories(){
-        RetrofitInstance.api.getCategories().enqueue(object :Callback<CategoryList>{
+    fun getCategories() {
+        RetrofitInstance.api.getCategories().enqueue(object : Callback<CategoryList> {
             override fun onResponse(call: Call<CategoryList>, response: Response<CategoryList>) {
-                if(response.isSuccessful){
-                    response.body()?.let {categoryList ->
+                if (response.isSuccessful) {
+                    response.body()?.let { categoryList ->
                         categoriesLiveData.postValue(categoryList.categories)
                     }
                 }
@@ -79,6 +80,24 @@ class HomeViewModel(
             override fun onFailure(call: Call<CategoryList>, t: Throwable) {
                 handleFailure("getCategories", t)
             }
+        })
+    }
+
+    fun getMealById(id: String) {
+        RetrofitInstance.api.getMealDetails(id).enqueue(object : Callback<MealList> {
+            override fun onResponse(call: Call<MealList>, response: Response<MealList>) {
+                if (response.isSuccessful) {
+                    val meal = response.body()?.meals?.first()
+                    meal?.let {
+                        bottomSheetLiveData.postValue(it)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<MealList>, t: Throwable) {
+                handleFailure("getMealById", t)
+            }
+
         })
     }
 
@@ -98,6 +117,8 @@ class HomeViewModel(
     fun observePopularItemsLiveData(): LiveData<List<MealsByCategory>?> = popularItemsLiveData
     fun observeCategoriesLiveData(): LiveData<List<Category>> = categoriesLiveData
     fun observeFavoritesMealsLiveData(): LiveData<List<Meal>> = favoritesMealsLiveData
+    fun observeBottomSheetLiveData(): LiveData<Meal> = bottomSheetLiveData
+
 
     private fun handleFailure(callName: String, throwable: Throwable) {
         Log.d("HomeViewModel", "Error in $callName: ${throwable.message}")

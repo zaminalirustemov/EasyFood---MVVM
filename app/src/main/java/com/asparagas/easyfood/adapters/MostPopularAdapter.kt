@@ -11,7 +11,8 @@ import com.bumptech.glide.Glide
 class MostPopularAdapter : RecyclerView.Adapter<MostPopularAdapter.PopularMealViewHolder>() {
 
     private var mealList = ArrayList<MealsByCategory>()
-    lateinit var onItemClick : ((MealsByCategory) -> Unit)
+    lateinit var onItemClick: ((MealsByCategory) -> Unit)
+    var onLongClickListener: ((MealsByCategory) -> Unit)? = null
 
     inner class PopularMealViewHolder(val binding: PopularItemsBinding) : ViewHolder(binding.root)
 
@@ -35,6 +36,11 @@ class MostPopularAdapter : RecyclerView.Adapter<MostPopularAdapter.PopularMealVi
 
         holder.itemView.setOnClickListener {
             onItemClick.invoke(mealList[position])
+        }
+
+        holder.itemView.setOnLongClickListener {
+            onLongClickListener?.invoke(mealList[position])
+            true
         }
     }
 }

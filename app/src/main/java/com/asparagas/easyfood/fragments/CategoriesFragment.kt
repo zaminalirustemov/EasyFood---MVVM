@@ -19,11 +19,10 @@ class CategoriesFragment : Fragment() {
     private lateinit var categoriesAdapter: CategoriesAdapter
     private lateinit var viewModel: HomeViewModel
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = (activity as MainActivity).viewModel
 
+        viewModel = (activity as MainActivity).viewModel
         categoriesAdapter = CategoriesAdapter()
     }
 
