@@ -19,3 +19,13 @@ EasyFood is an app that makes making food easier and gives you full information 
 <img src="https://github.com/zaminalirustemov/EasyFood---MVVM/assets/116644215/ec75f6dc-1b65-4c81-b874-4eb4207ead7a" alt="Resim Açıklaması" width="240" height="480">
 <img src="https://github.com/zaminalirustemov/EasyFood---MVVM/assets/116644215/12c3f220-7c31-4389-b945-5d2a2f2c12ea" alt="Resim Açıklaması" width="240" height="480">
 <img src="https://github.com/zaminalirustemov/EasyFood---MVVM/assets/116644215/94f4c4ad-a637-400b-8133-45ad6046402f" alt="Resim Açıklaması" width="240" height="480">
+
+
+# Libraries and technologies used
+- Navigation component : one activity contains multiple fragments instead of creating multiple activites.
+- Retrofit : making HTTP connection with the rest API and convert meal json file to Kotlin/Java object.
+- Room : Save meals in local database.
+- MVVM & LiveData : Saperate logic code from views and save the state in case the screen configuration changes.
+- Coroutines : do some code in the background.
+- View binding : instead of inflating views manually view binding will take care of that.
+- Glide : Catch images and load them in imageView.
