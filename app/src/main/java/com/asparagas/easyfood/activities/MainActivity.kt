@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
+import androidx.navigation.ui.NavigationUI
 import com.asparagas.easyfood.R
 import com.asparagas.easyfood.databinding.ActivityMainBinding
 import com.asparagas.easyfood.db.MealDatabase
@@ -12,6 +14,7 @@ import com.asparagas.easyfood.fragments.FavoritesFragment
 import com.asparagas.easyfood.fragments.HomeFragment
 import com.asparagas.easyfood.viewModel.HomeViewModel
 import com.asparagas.easyfood.viewModel.HomeViewModelFactory
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,29 +31,10 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        loadInitialFragment()
-        setupBottomNavigation()
-    }
+        val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        val navController = Navigation.findNavController(this,R.id.frag_host)
 
-    private fun loadInitialFragment() {
-        loadFragment(HomeFragment())
-    }
+        NavigationUI.setupWithNavController(bottomNavigation,navController)
 
-    private fun setupBottomNavigation() {
-        binding.bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.homeFragment -> loadFragment(HomeFragment())
-                R.id.favoritesFragment -> loadFragment(FavoritesFragment())
-                R.id.categoriesFragment -> loadFragment(CategoriesFragment())
-                else -> loadFragment(HomeFragment())
-            }
-            true
-        }
-    }
-
-    private fun loadFragment(fragment: Fragment) {
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.frag_host, fragment)
-        transaction.commit()
     }
 }

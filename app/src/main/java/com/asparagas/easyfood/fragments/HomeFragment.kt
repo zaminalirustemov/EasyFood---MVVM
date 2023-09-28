@@ -5,11 +5,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.asparagas.easyfood.R
 import com.asparagas.easyfood.activities.CategoryMealsActivity
 import com.asparagas.easyfood.activities.MainActivity
 import com.asparagas.easyfood.activities.MealActivity
@@ -22,7 +26,6 @@ import com.asparagas.easyfood.pojo.MealsByCategory
 import com.asparagas.easyfood.pojo.Meal
 import com.asparagas.easyfood.viewModel.HomeViewModel
 import com.bumptech.glide.Glide
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class HomeFragment : Fragment() {
 
@@ -44,12 +47,13 @@ class HomeFragment : Fragment() {
         viewModel = (activity as MainActivity).viewModel
         popularItemsAdapter = MostPopularAdapter()
         categoriesAdapter = CategoriesAdapter()
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -73,19 +77,29 @@ class HomeFragment : Fragment() {
         viewModel.getCategories()
         observerCategories()
         onCategoryClick()
+
+        onSearchIconClick()
+    }
+
+    private fun onSearchIconClick() {
+        binding.imgSearch.setOnClickListener {
+            val action = HomeFragmentDirections.actionHomeFragmentToSearchFragment()
+            val navController = findNavController()
+            navController.navigate(action)
+        }
     }
 
     private fun onPopularItemLongClick() {
-        popularItemsAdapter.onLongClickListener = {meal->
-            val mealBottomSheetFragment= MealBottomSheetFragment.newInstance(meal.idMeal)
-            mealBottomSheetFragment.show(childFragmentManager,"Meal info")
+        popularItemsAdapter.onLongClickListener = { meal ->
+            val mealBottomSheetFragment = MealBottomSheetFragment.newInstance(meal.idMeal)
+            mealBottomSheetFragment.show(childFragmentManager, "Meal info")
         }
     }
 
     private fun onCategoryClick() {
         categoriesAdapter.onItemClick = { category ->
             val intent = Intent(activity, CategoryMealsActivity::class.java)
-            intent.putExtra(CATEGORY_NAME,category.strCategory)
+            intent.putExtra(CATEGORY_NAME, category.strCategory)
             startActivity(intent)
         }
     }
@@ -123,7 +137,6 @@ class HomeFragment : Fragment() {
             startActivity(intent)
         }
     }
-
 
     private fun observerRandomMeal() {
         viewModel.observeRandomMealLiveData().observe(viewLifecycleOwner, Observer { meal ->

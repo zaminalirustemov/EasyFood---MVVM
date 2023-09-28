@@ -1,7 +1,6 @@
 package com.asparagas.easyfood.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,11 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.asparagas.easyfood.R
 import com.asparagas.easyfood.activities.MainActivity
-import com.asparagas.easyfood.adapters.FavoritesMealsAdapter
+import com.asparagas.easyfood.adapters.MealsAdapter
 import com.asparagas.easyfood.databinding.FragmentFavoritesBinding
-import com.asparagas.easyfood.pojo.Meal
 import com.asparagas.easyfood.viewModel.HomeViewModel
 import com.google.android.material.snackbar.Snackbar
 
@@ -21,12 +18,12 @@ class FavoritesFragment : Fragment() {
 
     private lateinit var binding: FragmentFavoritesBinding
     private lateinit var viewModel: HomeViewModel
-    private lateinit var favoritesMealsAdapter: FavoritesMealsAdapter
+    private lateinit var mealsAdapter: MealsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = (activity as MainActivity).viewModel
-        favoritesMealsAdapter = FavoritesMealsAdapter()
+        mealsAdapter = MealsAdapter()
     }
 
     override fun onCreateView(
@@ -50,13 +47,13 @@ class FavoritesFragment : Fragment() {
     private fun prepareRecyclerView() {
         binding.rvFavorites.apply {
             layoutManager = GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
-            adapter = favoritesMealsAdapter
+            adapter = mealsAdapter
         }
     }
 
     private fun observeFavorites() {
         viewModel.observeFavoritesMealsLiveData().observe(requireActivity()) { meals ->
-            favoritesMealsAdapter.differ.submitList(meals)
+            mealsAdapter.differ.submitList(meals)
         }
     }
 
@@ -82,7 +79,7 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun handleSwipe(position: Int) {
-        val deletedMeal = favoritesMealsAdapter.differ.currentList[position]
+        val deletedMeal = mealsAdapter.differ.currentList[position]
         viewModel.deleteMeal(deletedMeal)
 
         Snackbar.make(requireView(), "Meal deleted", Snackbar.LENGTH_LONG).setAction("Undo") {

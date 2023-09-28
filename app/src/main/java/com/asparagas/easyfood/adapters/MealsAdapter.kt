@@ -10,8 +10,8 @@ import com.asparagas.easyfood.databinding.MealItemBinding
 import com.asparagas.easyfood.pojo.Meal
 import com.bumptech.glide.Glide
 
-class FavoritesMealsAdapter :
-    RecyclerView.Adapter<FavoritesMealsAdapter.FavoritesMealsAdapterViewHolder>() {
+class MealsAdapter :
+    RecyclerView.Adapter<MealsAdapter.FavoritesMealsAdapterViewHolder>() {
     inner class FavoritesMealsAdapterViewHolder(val binding: MealItemBinding) :
         ViewHolder(binding.root)
 

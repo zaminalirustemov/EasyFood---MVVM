@@ -28,6 +28,7 @@ class HomeViewModel(
     private var categoriesLiveData = MutableLiveData<List<Category>>()
     private var favoritesMealsLiveData = mealDatabase.mealDao().getAllMeals()
     private var bottomSheetLiveData = MutableLiveData<Meal>()
+    private var searchedMealLiveData = MutableLiveData<List<Meal>>()
 
     fun getRandomMeal() {
         RetrofitInstance.api.getRandomMeal().enqueue(object : Callback<MealList> {
@@ -45,7 +46,6 @@ class HomeViewModel(
             }
         })
     }
-
 
     fun getPopularItems() {
         RetrofitInstance.api.getMostPopularItems("Seafood")
@@ -113,11 +113,28 @@ class HomeViewModel(
         }
     }
 
+    fun searchedMeals(searchQuery: String) {
+        RetrofitInstance.api.searchMeals(searchQuery).enqueue(object : Callback<MealList> {
+            override fun onResponse(call: Call<MealList>, response: Response<MealList>) {
+                val mealList = response.body()?.meals
+                mealList?.let {
+                    searchedMealLiveData.postValue(it)
+                }
+            }
+
+            override fun onFailure(call: Call<MealList>, t: Throwable) {
+                handleFailure("searchedMeals",t)
+            }
+
+        })
+    }
+
     fun observeRandomMealLiveData(): LiveData<Meal> = randomMealLiveData
     fun observePopularItemsLiveData(): LiveData<List<MealsByCategory>?> = popularItemsLiveData
     fun observeCategoriesLiveData(): LiveData<List<Category>> = categoriesLiveData
     fun observeFavoritesMealsLiveData(): LiveData<List<Meal>> = favoritesMealsLiveData
     fun observeBottomSheetLiveData(): LiveData<Meal> = bottomSheetLiveData
+    fun observeSearchedMealLiveData(): LiveData<List<Meal>> = searchedMealLiveData
 
 
     private fun handleFailure(callName: String, throwable: Throwable) {

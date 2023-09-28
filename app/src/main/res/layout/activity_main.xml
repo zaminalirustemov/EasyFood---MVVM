@@ -15,10 +15,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/btm_menu"/>
 
-    <androidx.fragment.app.FragmentContainerView
+    <fragment
         android:id="@+id/frag_host"
         android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         app:defaultNavHost="true"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
@@ -26,4 +26,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/nav_graph" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

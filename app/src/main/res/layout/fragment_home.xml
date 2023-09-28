@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".fragments.HomeFragment">
 
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -135,6 +136,8 @@
             android:scrollbars="none" />
 
     </androidx.cardview.widget.CardView>
+
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
