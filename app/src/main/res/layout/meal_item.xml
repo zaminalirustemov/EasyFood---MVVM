@@ -27,7 +27,7 @@
             android:layout_marginTop="@dimen/_5sdp"
             android:text="Meal Name"
             android:textColor="@color/black"
-            android:textSize="@dimen/_15ssp"
+            android:textSize="@dimen/_10ssp"
             app:layout_constraintEnd_toEndOf="@id/img_meal"
             app:layout_constraintStart_toStartOf="@id/img_meal"
             app:layout_constraintTop_toBottomOf="@id/img_meal" />
