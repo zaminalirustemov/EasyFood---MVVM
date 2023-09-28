@@ -1,5 +1,6 @@
 package com.asparagas.easyfood.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +10,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.asparagas.easyfood.activities.MainActivity
+import com.asparagas.easyfood.activities.MealActivity
 import com.asparagas.easyfood.adapters.MealsAdapter
 import com.asparagas.easyfood.databinding.FragmentFavoritesBinding
+import com.asparagas.easyfood.fragments.bottomsheet.MealBottomSheetFragment
 import com.asparagas.easyfood.viewModel.HomeViewModel
 import com.google.android.material.snackbar.Snackbar
 
@@ -42,6 +45,27 @@ class FavoritesFragment : Fragment() {
         observeFavorites()
 
         setupItemTouchHelper()
+
+        onFavoriteItemClick()
+
+        onFavoriteItemLongClick()
+    }
+
+    private fun onFavoriteItemLongClick() {
+        mealsAdapter.onLongClickListener = { meal ->
+            val mealBottomSheetFragment = MealBottomSheetFragment.newInstance(meal.idMeal)
+            mealBottomSheetFragment.show(childFragmentManager, "Meal info")
+        }
+    }
+
+    private fun onFavoriteItemClick() {
+        mealsAdapter.onItemClick = { meal ->
+            val intent = Intent(activity, MealActivity::class.java)
+            intent.putExtra(HomeFragment.MEAL_ID, meal.idMeal)
+            intent.putExtra(HomeFragment.MEAL_NAME, meal.strMeal)
+            intent.putExtra(HomeFragment.MEAL_THUMB, meal.strMealThumb)
+            startActivity(intent)
+        }
     }
 
     private fun prepareRecyclerView() {
@@ -53,7 +77,12 @@ class FavoritesFragment : Fragment() {
 
     private fun observeFavorites() {
         viewModel.observeFavoritesMealsLiveData().observe(requireActivity()) { meals ->
+            if (meals.isEmpty()) {
+                binding.imgBrokenHeart.visibility = View.VISIBLE
+                binding.tvBrokenHeartTitle.visibility = View.VISIBLE
+            }
             mealsAdapter.differ.submitList(meals)
+
         }
     }
 
@@ -84,6 +113,8 @@ class FavoritesFragment : Fragment() {
 
         Snackbar.make(requireView(), "Meal deleted", Snackbar.LENGTH_LONG).setAction("Undo") {
             viewModel.insertMeal(deletedMeal)
+            binding.imgBrokenHeart.visibility = View.INVISIBLE
+            binding.tvBrokenHeartTitle.visibility = View.INVISIBLE
         }.show()
     }
 }

@@ -15,6 +15,7 @@ class MealsAdapter :
     RecyclerView.Adapter<MealsAdapter.FavoritesMealsAdapterViewHolder>() {
 
     lateinit var onItemClick: ((Meal) -> Unit)
+    var onLongClickListener: ((Meal) -> Unit)? = null
 
     inner class FavoritesMealsAdapterViewHolder(val binding: MealItemBinding) :
         ViewHolder(binding.root)
@@ -52,6 +53,11 @@ class MealsAdapter :
 
         holder.itemView.setOnClickListener {
             onItemClick.invoke(meal)
+        }
+
+        holder.itemView.setOnLongClickListener {
+            onLongClickListener?.invoke(meal)
+            true
         }
     }
 

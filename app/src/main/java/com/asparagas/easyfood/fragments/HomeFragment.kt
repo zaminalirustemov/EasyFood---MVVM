@@ -65,6 +65,7 @@ class HomeFragment : Fragment() {
         prepareCategoriesRecyclerViews()
 
 
+        binding.progressBarRandomMeal.visibility=View.VISIBLE
         viewModel.getRandomMeal()
         observerRandomMeal()
         onRandomMealClick()
@@ -156,6 +157,7 @@ class HomeFragment : Fragment() {
                     .load(it.strMealThumb)
                     .into(binding.imgRandomMeal)
 
+                binding.progressBarRandomMeal.visibility=View.INVISIBLE
                 this.randomMeal = it
             }
         })

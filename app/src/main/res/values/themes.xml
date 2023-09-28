@@ -5,7 +5,8 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryVariant">@color/accent</item>
         <item name="android:statusBarColor"  >@color/white</item>
-        <item name="android:windowLightStatusBar"   >true</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
     </style>
 
     <style name="Theme.EasyFood" parent="Base.Theme.EasyFood" />

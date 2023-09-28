@@ -75,7 +75,7 @@ class MealActivity : AppCompatActivity() {
                 mealToSave = meal
                 Log.e("TEST", mealToSave!!.strMeal.toString())
 
-                binding.detailCategory.text = "Category: ${meal.strMeal}"
+                binding.detailCategory.text = "Category: ${meal.strCategory}"
                 binding.detailArea.text = "Area: ${meal.strArea}"
                 binding.istructionsSteps.text = meal.strInstructions
 

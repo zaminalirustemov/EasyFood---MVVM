@@ -1,5 +1,6 @@
 package com.asparagas.easyfood.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.asparagas.easyfood.R
+import com.asparagas.easyfood.activities.CategoryMealsActivity
 import com.asparagas.easyfood.activities.MainActivity
 import com.asparagas.easyfood.adapters.CategoriesAdapter
 import com.asparagas.easyfood.databinding.FragmentCategoriesBinding
@@ -40,6 +42,16 @@ class CategoriesFragment : Fragment() {
         prepareRecyclerView()
 
         observeCategories()
+
+        onCategoryClick()
+    }
+
+    private fun onCategoryClick() {
+        categoriesAdapter.onItemClick = { category ->
+            val intent = Intent(activity, CategoryMealsActivity::class.java)
+            intent.putExtra(HomeFragment.CATEGORY_NAME, category.strCategory)
+            startActivity(intent)
+        }
     }
 
     private fun observeCategories() {
