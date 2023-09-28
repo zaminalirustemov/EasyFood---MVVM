@@ -8,10 +8,14 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.asparagas.easyfood.databinding.MealItemBinding
 import com.asparagas.easyfood.pojo.Meal
+import com.asparagas.easyfood.pojo.MealsByCategory
 import com.bumptech.glide.Glide
 
 class MealsAdapter :
     RecyclerView.Adapter<MealsAdapter.FavoritesMealsAdapterViewHolder>() {
+
+    lateinit var onItemClick: ((Meal) -> Unit)
+
     inner class FavoritesMealsAdapterViewHolder(val binding: MealItemBinding) :
         ViewHolder(binding.root)
 
@@ -43,7 +47,12 @@ class MealsAdapter :
         Glide.with(holder.itemView)
             .load(meal.strMealThumb)
             .into(holder.binding.imgMeal)
+
         holder.binding.tvMealName.text= meal.strMeal
+
+        holder.itemView.setOnClickListener {
+            onItemClick.invoke(meal)
+        }
     }
 
 

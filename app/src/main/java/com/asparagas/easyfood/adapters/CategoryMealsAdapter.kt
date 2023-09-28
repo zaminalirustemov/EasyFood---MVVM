@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 class CategoryMealsAdapter : RecyclerView.Adapter<CategoryMealsAdapter.CategoryMealsViewHolder>() {
 
     private var mealList = ArrayList<MealsByCategory>()
+    lateinit var onItemClick: ((MealsByCategory) -> Unit)
 
     inner class CategoryMealsViewHolder(var binding: MealItemBinding) : ViewHolder(binding.root)
 
@@ -28,6 +29,11 @@ class CategoryMealsAdapter : RecyclerView.Adapter<CategoryMealsAdapter.CategoryM
 
     override fun onBindViewHolder(holder: CategoryMealsViewHolder, position: Int) {
         Glide.with(holder.itemView).load(mealList[position].strMealThumb).into(holder.binding.imgMeal)
+
         holder.binding.tvMealName.text = mealList[position].strMeal
+
+        holder.itemView.setOnClickListener {
+            onItemClick.invoke(mealList[position])
+        }
     }
 }

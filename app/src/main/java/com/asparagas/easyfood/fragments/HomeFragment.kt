@@ -68,6 +68,8 @@ class HomeFragment : Fragment() {
         viewModel.getRandomMeal()
         observerRandomMeal()
         onRandomMealClick()
+        onRandomMealLongClick()
+
 
         viewModel.getPopularItems()
         observerPopularItems()
@@ -79,6 +81,15 @@ class HomeFragment : Fragment() {
         onCategoryClick()
 
         onSearchIconClick()
+    }
+
+    private fun onRandomMealLongClick() {
+        binding.randomMealCard.setOnLongClickListener {
+            val mealBottomSheetFragment = MealBottomSheetFragment.newInstance(randomMeal.idMeal)
+            mealBottomSheetFragment.show(childFragmentManager, "Meal info")
+            true
+        }
+
     }
 
     private fun onSearchIconClick() {

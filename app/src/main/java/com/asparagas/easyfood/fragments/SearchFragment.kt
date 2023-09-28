@@ -1,5 +1,6 @@
 package com.asparagas.easyfood.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.asparagas.easyfood.activities.MainActivity
+import com.asparagas.easyfood.activities.MealActivity
 import com.asparagas.easyfood.adapters.MealsAdapter
 import com.asparagas.easyfood.databinding.FragmentSearchBinding
 import com.asparagas.easyfood.viewModel.HomeViewModel
@@ -48,6 +50,18 @@ class SearchFragment : Fragment() {
         performSearch()
 
         observeSearchedMealsLiveData()
+
+        onItemClick()
+    }
+
+    private fun onItemClick() {
+        searchRecyclerViewAdapter.onItemClick ={meal->
+            val intent = Intent(activity, MealActivity::class.java)
+            intent.putExtra(HomeFragment.MEAL_ID, meal.idMeal)
+            intent.putExtra(HomeFragment.MEAL_NAME, meal.strMeal)
+            intent.putExtra(HomeFragment.MEAL_THUMB, meal.strMealThumb)
+            startActivity(intent)
+        }
     }
 
     private fun performSearch() {
