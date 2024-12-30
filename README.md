@@ -6,6 +6,7 @@ EasyFood is an app that makes making food easier and gives you full information 
 <img src="https://github.com/zaminalirustemov/EasyFood---MVVM/assets/116644215/f1b240e9-2184-4b79-ab9f-ee84c465627b" alt="Resim Açıklaması" width="240" height="480">
 <img src="https://github.com/zaminalirustemov/EasyFood---MVVM/assets/116644215/7665d41b-9424-4f41-8e4d-d85dc67aa7cf" alt="Resim Açıklaması" width="240" height="480">
 
+
 #### Search box & Meal details
 <img src="https://github.com/zaminalirustemov/EasyFood---MVVM/assets/116644215/34cf8d24-4f2e-437a-bd80-dc2568b68fb7" alt="Resim Açıklaması" width="240" height="480">
 <img src="https://github.com/zaminalirustemov/EasyFood---MVVM/assets/116644215/918b8275-9a70-4b93-97df-96af06f8e517" alt="Resim Açıklaması" width="240" height="480">
